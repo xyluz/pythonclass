@@ -10,6 +10,7 @@ import os
 import validation
 
 user_db_path = "data/user_record/"
+auth_session_path = "data/auth_session"
 
 
 def create(user_account_number, first_name, last_name, email, password):
@@ -44,12 +45,12 @@ def create(user_account_number, first_name, last_name, email, password):
 
     else:
 
-        f.write(str(user_data));
+        f.write(str(user_data))
         completion_state = True
 
     finally:
 
-        f.close();
+        f.close()
         return completion_state
 
 
@@ -85,14 +86,16 @@ def read(user_account_number):
     return False
 
 
-def update(user_account_number):
-    print("update user record")
-    # find user with account number
-    # fetch the content of the file
-    # update the content of the file
-    # save the file
-    # return true
+def update(user_account_number, user_details):
 
+    user = user_details[0] + "," + user_details[1] + "," + user_details[2] + "," + user_details[3] + "," + user_details[4]
+    
+    try:
+        f = open(user_db_path + str(user_account_number) + ".txt", "w")
+        f.write(user)
+        return True
+    except:
+        return False
 
 def delete(user_account_number):
 

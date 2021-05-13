@@ -15,6 +15,7 @@ import validation
 import database
 from getpass import getpass
 
+account_number_from_user = None
 
 def init():
     print("Welcome to bankPHP")
@@ -37,6 +38,7 @@ def init():
 def login():
     print("********* Login ***********")
 
+    global account_number_from_user
     account_number_from_user = input("What is your account number? \n")
 
     is_valid_account_number = validation.account_number_validation(account_number_from_user)
@@ -92,7 +94,7 @@ def bank_operation(user):
 
     if selected_option == 1:
 
-        deposit_operation()
+        deposit_operation(user)
     elif selected_option == 2:
 
         withdrawal_operation()
@@ -117,8 +119,21 @@ def withdrawal_operation():
     # display current balance
 
 
-def deposit_operation():
-    print("Deposit Operations")
+def deposit_operation(user):
+    
+    current_balance = int(get_current_balance(user))
+    amount_to_deposit = int(input("How much do you want to deposit? "))
+    current_balance += amount_to_deposit
+    set_current_balance(user, str(current_balance))
+
+    if database.update(account_number_from_user, user):
+        print("Your account balance is {}".format(current_balance))
+        bank_operation(user)
+    
+    else:
+        print("Transaction not successful")
+        bank_operation(user)
+
     # get current balance
     # get amount to deposit
     # add deposited amount to current balance
